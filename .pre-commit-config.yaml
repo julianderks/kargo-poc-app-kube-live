@@ -1,0 +1,23 @@
+# +argocd:skip-file-rendering
+
+default_install_hook_types:
+  - pre-commit
+
+repos:
+  # BASIC CONF FOR ALL PRE-COMMITS REPO TYPE
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        # ignore (automation) folders/files starting with .
+        exclude: ^\..*|.*/\..*
+      - id: end-of-file-fixer
+        exclude: ^\..*|.*/\..*
+      - id: check-added-large-files
+        exclude: ^\..*|.*/\..*
+
+  # CHECK IF NO SENSITIVE VALUES WILL BE COMMITED
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.27.2
+    hooks:
+      - id: gitleaks

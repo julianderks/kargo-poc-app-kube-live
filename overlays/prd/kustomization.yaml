@@ -1,0 +1,44 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namePrefix: kargo-poc-app-
+
+resources:
+  - ../../base
+
+images:
+  - name: application:latest
+    newName: europe-west4-docker.pkg.dev/shared-9456/sng/gitops-source-app
+    newTag: 1.2.1
+
+replacements:
+  - source:
+      kind: Deployment
+      fieldPath: spec.template.spec.containers.[name=application].image
+      options:
+        delimiter: ":"
+        index: 1
+    targets:
+      - select:
+          name: app
+        fieldPaths:
+          - metadata.labels.[app.kubernetes.io/version]
+          - spec.template.metadata.labels.[app.kubernetes.io/version]
+        options:
+          create: true
+
+commonAnnotations:
+  sng.metadata/app-category: Julian
+
+labels:
+  - includeSelectors: true
+    pairs:
+      app.kubernetes.io/instance: gitops-source-app
+      app.kubernetes.io/managed-by: Kustomize
+      app.kubernetes.io/name: gitops-source-app
+
+configMapGenerator:
+  - behavior: merge
+    envs:
+      - configs/properties.sng.conf
+    name: config-env
