@@ -2,8 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - git@bitbucket.org:sng-code/kube-base-config.git//base?ref=0.1.5
-  - git@bitbucket.org:sng-code/kube-base-app.git//base?ref=0.4.4
+  - https://bitbucket.org/sng-code/kube-base-config.git//base?ref=0.1.5
+  - https://bitbucket.org/sng-code/kube-base-app.git//base?ref=0.4.4
 
   - resources/secret-env-shared.externalsecret.yaml
 
